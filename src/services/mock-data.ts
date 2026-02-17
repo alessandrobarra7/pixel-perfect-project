@@ -13,18 +13,16 @@ export const mockUnits: Unit[] = [
 // ====== USERS ======
 export const mockUserPasswords: Record<string, string> = {
   'alessandro': '123456789',
-  'gian': 'por',
-  'jean': 'isso',
-  'ana@lauds.med': '',    // qualquer senha
-  'pedro@lauds.med': '',  // qualquer senha
+  'gian': '123456789',
+  'natan': '123456789',
+  'lidiane': '123456789',
 };
 
 export const mockUsers: User[] = [
-  { id: 'usr1', email: 'alessandro', full_name: 'Alessandro Mestre', role: 'admin_master', unit_id: 'u1', unit_name: 'UBS Central', is_active: true, created_at: '2026-01-01T00:00:00Z', updated_at: '2026-01-01T00:00:00Z' },
-  { id: 'usr2', email: 'gian', full_name: 'Dr. Gian Medicina', role: 'medico', unit_id: 'u1', unit_name: 'UBS Central', is_active: true, created_at: '2026-01-05T00:00:00Z', updated_at: '2026-01-05T00:00:00Z' },
-  { id: 'usr3', email: 'jean', full_name: 'Dr. Jean Medicina', role: 'medico', unit_id: 'u2', unit_name: 'Hospital Municipal', is_active: true, created_at: '2026-01-10T00:00:00Z', updated_at: '2026-01-10T00:00:00Z' },
-  { id: 'usr4', email: 'ana@lauds.med', full_name: 'Ana Visualização', role: 'viewer', unit_id: 'u2', unit_name: 'Hospital Municipal', is_active: true, created_at: '2026-01-12T00:00:00Z', updated_at: '2026-01-12T00:00:00Z' },
-  { id: 'usr5', email: 'pedro@lauds.med', full_name: 'Pedro Gestor', role: 'unit_admin', unit_id: 'u2', unit_name: 'Hospital Municipal', is_active: true, created_at: '2026-01-15T00:00:00Z', updated_at: '2026-01-15T00:00:00Z' },
+  { id: 'usr1', email: 'alessandro', full_name: 'Alessandro', role: 'admin_master', unit_id: 'u1', unit_name: 'UBS Central', is_active: true, created_at: '2026-01-01T00:00:00Z', updated_at: '2026-01-01T00:00:00Z' },
+  { id: 'usr2', email: 'gian', full_name: 'Dr. Gian', role: 'medico', unit_id: 'u1', unit_name: 'UBS Central', is_active: true, created_at: '2026-01-05T00:00:00Z', updated_at: '2026-01-05T00:00:00Z' },
+  { id: 'usr3', email: 'natan', full_name: 'Natan', role: 'unit_admin', unit_id: 'u2', unit_name: 'Hospital Municipal', is_active: true, created_at: '2026-01-10T00:00:00Z', updated_at: '2026-01-10T00:00:00Z' },
+  { id: 'usr4', email: 'lidiane', full_name: 'Lidiane', role: 'viewer', unit_id: 'u2', unit_name: 'Hospital Municipal', is_active: true, created_at: '2026-01-12T00:00:00Z', updated_at: '2026-01-12T00:00:00Z' },
 ];
 
 // ====== STUDIES ======
