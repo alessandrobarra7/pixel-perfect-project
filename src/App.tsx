@@ -9,6 +9,12 @@ import AppLayout from "@/components/AppLayout";
 import LoginPage from "@/pages/LoginPage";
 import StudiesPage from "@/pages/StudiesPage";
 import ReportEditorPage from "@/pages/ReportEditorPage";
+import ViewerPage from "@/pages/ViewerPage";
+import AdminLayout from "@/pages/admin/AdminLayout";
+import UnitsAdminPage from "@/pages/admin/UnitsAdminPage";
+import UsersAdminPage from "@/pages/admin/UsersAdminPage";
+import PermissionsAdminPage from "@/pages/admin/PermissionsAdminPage";
+import AuditAdminPage from "@/pages/admin/AuditAdminPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,7 +32,16 @@ const App = () => (
 
             <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
               <Route path="/studies" element={<StudiesPage />} />
-              <Route path="/reports/:studyId" element={<ReportEditorPage />} />
+              <Route path="/reports/:studyId" element={<ProtectedRoute allowedRoles={['medico', 'admin_master']}><ReportEditorPage /></ProtectedRoute>} />
+              <Route path="/viewer/:studyId" element={<ViewerPage />} />
+
+              <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin_master', 'unit_admin']}><AdminLayout /></ProtectedRoute>}>
+                <Route index element={<Navigate to="/admin/units" replace />} />
+                <Route path="units" element={<UnitsAdminPage />} />
+                <Route path="users" element={<UsersAdminPage />} />
+                <Route path="permissions" element={<PermissionsAdminPage />} />
+                <Route path="audit" element={<AuditAdminPage />} />
+              </Route>
             </Route>
 
             <Route path="*" element={<NotFound />} />
