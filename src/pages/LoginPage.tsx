@@ -9,8 +9,8 @@ import loginBg from '@/assets/login-bg.png';
 export default function LoginPage() {
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('admin@portal.med');
-  const [password, setPassword] = useState('123456');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -40,7 +40,7 @@ export default function LoginPage() {
         <img src={loginBg} alt="" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 flex flex-col justify-end p-10">
-          <h2 className="text-3xl font-bold text-white tracking-tight">RadPortal</h2>
+          <h2 className="text-3xl font-bold text-white tracking-tight">LAUDS</h2>
           <p className="mt-1 text-sm text-white/60">Sistema de Laudos Radiológicos</p>
         </div>
       </div>
@@ -49,7 +49,7 @@ export default function LoginPage() {
       <div className="flex flex-1 flex-col items-center justify-center bg-[hsl(var(--background))] px-6">
         <div className="w-full max-w-sm">
           <div className="mb-8 lg:hidden">
-            <h1 className="text-2xl font-bold text-foreground tracking-tight">RadPortal</h1>
+            <h1 className="text-2xl font-bold text-foreground tracking-tight">LAUDS</h1>
             <p className="text-xs text-muted-foreground">Sistema de Laudos Radiológicos</p>
           </div>
 
@@ -70,6 +70,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 required
+                placeholder="seu@email.com"
                 className="h-9 text-sm"
               />
             </div>
@@ -80,6 +81,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
+                placeholder="••••••"
                 className="h-9 text-sm"
               />
             </div>
@@ -87,15 +89,6 @@ export default function LoginPage() {
               {loading ? 'Entrando...' : 'Entrar'}
             </Button>
           </form>
-
-          <div className="mt-6 border-t border-border pt-4">
-            <p className="text-[10px] font-medium text-muted-foreground mb-1">Usuários de teste:</p>
-            <ul className="space-y-0.5 text-[10px] text-muted-foreground">
-              <li><strong>admin@portal.med</strong> — Admin</li>
-              <li><strong>maria@portal.med</strong> — Médica</li>
-              <li><strong>ana@portal.med</strong> — Viewer</li>
-            </ul>
-          </div>
         </div>
       </div>
     </div>

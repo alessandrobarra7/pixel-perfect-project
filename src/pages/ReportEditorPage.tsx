@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getStudyById, getReportByStudyId, saveReport } from '@/services/api';
 import type { Study, Report } from '@/types';
+import { formatPatientName } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
-import { ArrowLeft, Save, Plus, Copy, Trash2, GripVertical } from 'lucide-react';
+import { ArrowLeft, Save, Plus, Copy, Trash2, GripVertical, Eye, Pencil, Check, X } from 'lucide-react';
 import { toast } from 'sonner';
 
-// Default predefined snippets
 const DEFAULT_SNIPPETS = [
   { id: '1', title: 'Tórax Normal', text: 'Campos pulmonares transparentes. Área cardíaca dentro dos limites da normalidade. Seios costofrênicos livres. Mediastino centrado.' },
   { id: '2', title: 'Crânio Normal', text: 'Parênquima cerebral de aspecto habitual. Sistema ventricular de dimensões normais. Estruturas da linha média centradas.' },
@@ -30,19 +30,22 @@ export default function ReportEditorPage() {
   const [body, setBody] = useState('');
   const [saving, setSaving] = useState(false);
 
-  // Snippets state — persisted to localStorage per user
+  // Snippets
   const [snippets, setSnippets] = useState<Snippet[]>(() => {
     try {
-      const saved = localStorage.getItem('radportal_snippets');
+      const saved = localStorage.getItem('lauds_snippets');
       return saved ? JSON.parse(saved) : DEFAULT_SNIPPETS;
     } catch { return DEFAULT_SNIPPETS; }
   });
   const [newTitle, setNewTitle] = useState('');
   const [newText, setNewText] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editText, setEditText] = useState('');
 
   useEffect(() => {
-    localStorage.setItem('radportal_snippets', JSON.stringify(snippets));
+    localStorage.setItem('lauds_snippets', JSON.stringify(snippets));
   }, [snippets]);
 
   useEffect(() => {
@@ -94,6 +97,23 @@ export default function ReportEditorPage() {
     toast.success('Copiado');
   };
 
+  const startEdit = (snippet: Snippet) => {
+    setEditingId(snippet.id);
+    setEditTitle(snippet.title);
+    setEditText(snippet.text);
+  };
+
+  const saveEdit = () => {
+    if (!editingId || !editTitle.trim() || !editText.trim()) return;
+    setSnippets(prev => prev.map(s => s.id === editingId ? { ...s, title: editTitle.trim(), text: editText.trim() } : s));
+    setEditingId(null);
+    toast.success('Predefinido atualizado');
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+  };
+
   if (!study) {
     return (
       <div className="flex h-64 items-center justify-center">
@@ -111,10 +131,16 @@ export default function ReportEditorPage() {
         </Button>
         <div className="flex-1 min-w-0">
           <h1 className="text-sm font-semibold text-foreground truncate">
-            Laudo — {study.patient_name}
+            Laudo — {formatPatientName(study.patient_name)}
           </h1>
           <p className="text-[10px] text-muted-foreground">{study.description} • {new Date(study.study_date).toLocaleDateString('pt-BR')}</p>
         </div>
+        <Button variant="outline" size="sm" className="h-8 text-xs gap-1.5" asChild>
+          <Link to={`/viewer/${study.id}`}>
+            <Eye className="h-3.5 w-3.5" />
+            Visualizar Exame
+          </Link>
+        </Button>
         <Button size="sm" className="h-8 text-xs gap-1.5" onClick={handleSave} disabled={saving}>
           <Save className="h-3.5 w-3.5" />
           {saving ? 'Salvando...' : 'Salvar'}
@@ -134,7 +160,7 @@ export default function ReportEditorPage() {
         </div>
 
         {/* Snippets panel */}
-        <div className="w-64 flex flex-col border border-border rounded bg-card overflow-hidden shrink-0">
+        <div className="w-72 flex flex-col border border-border rounded bg-card overflow-hidden shrink-0">
           <div className="flex items-center justify-between px-3 py-2 border-b border-border bg-muted/50">
             <span className="text-xs font-medium text-muted-foreground">Predefinidos</span>
             <Button
@@ -151,19 +177,8 @@ export default function ReportEditorPage() {
           {/* Add form */}
           {showAddForm && (
             <div className="p-2 border-b border-border space-y-1.5 bg-muted/30">
-              <Input
-                placeholder="Título"
-                value={newTitle}
-                onChange={e => setNewTitle(e.target.value)}
-                className="h-7 text-xs"
-              />
-              <Textarea
-                placeholder="Texto predefinido..."
-                value={newText}
-                onChange={e => setNewText(e.target.value)}
-                className="text-xs min-h-[60px] resize-none"
-                rows={3}
-              />
+              <Input placeholder="Título" value={newTitle} onChange={e => setNewTitle(e.target.value)} className="h-7 text-xs" />
+              <Textarea placeholder="Texto predefinido..." value={newText} onChange={e => setNewText(e.target.value)} className="text-xs min-h-[60px] resize-none" rows={3} />
               <div className="flex gap-1">
                 <Button size="sm" className="h-6 text-[10px] flex-1" onClick={addSnippet}>Salvar</Button>
                 <Button size="sm" variant="ghost" className="h-6 text-[10px]" onClick={() => setShowAddForm(false)}>Cancelar</Button>
@@ -174,35 +189,46 @@ export default function ReportEditorPage() {
           {/* Snippet list */}
           <div className="flex-1 overflow-auto">
             {snippets.map(snippet => (
-              <div
-                key={snippet.id}
-                className="group border-b border-border last:border-0 px-3 py-2 hover:bg-muted/30 transition-colors cursor-pointer"
-                onClick={() => insertSnippet(snippet.text)}
-                title="Clique para inserir no laudo"
-              >
-                <div className="flex items-start gap-1.5">
-                  <GripVertical className="h-3 w-3 text-muted-foreground/40 mt-0.5 shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-medium text-foreground truncate">{snippet.title}</p>
-                    <p className="text-[10px] text-muted-foreground line-clamp-2 mt-0.5">{snippet.text}</p>
+              <div key={snippet.id} className="group border-b border-border last:border-0 px-3 py-2 hover:bg-muted/30 transition-colors">
+                {editingId === snippet.id ? (
+                  <div className="space-y-1.5">
+                    <Input value={editTitle} onChange={e => setEditTitle(e.target.value)} className="h-7 text-xs" />
+                    <Textarea value={editText} onChange={e => setEditText(e.target.value)} className="text-xs min-h-[50px] resize-none" rows={2} />
+                    <div className="flex gap-1">
+                      <Button size="sm" className="h-6 text-[10px] gap-1" onClick={saveEdit}>
+                        <Check className="h-3 w-3" /> Salvar
+                      </Button>
+                      <Button size="sm" variant="ghost" className="h-6 text-[10px] gap-1" onClick={cancelEdit}>
+                        <X className="h-3 w-3" /> Cancelar
+                      </Button>
+                    </div>
                   </div>
-                  <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                    <button
-                      className="p-0.5 hover:text-foreground text-muted-foreground"
-                      onClick={e => { e.stopPropagation(); copySnippet(snippet.text); }}
-                      title="Copiar"
-                    >
-                      <Copy className="h-3 w-3" />
-                    </button>
-                    <button
-                      className="p-0.5 hover:text-destructive text-muted-foreground"
-                      onClick={e => { e.stopPropagation(); removeSnippet(snippet.id); }}
-                      title="Remover"
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </button>
+                ) : (
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => insertSnippet(snippet.text)}
+                    title="Clique para inserir no laudo"
+                  >
+                    <div className="flex items-start gap-1.5">
+                      <GripVertical className="h-3 w-3 text-muted-foreground/40 mt-0.5 shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-medium text-foreground truncate">{snippet.title}</p>
+                        <p className="text-[10px] text-muted-foreground line-clamp-2 mt-0.5">{snippet.text}</p>
+                      </div>
+                      <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                        <button className="p-0.5 hover:text-foreground text-muted-foreground" onClick={e => { e.stopPropagation(); startEdit(snippet); }} title="Editar">
+                          <Pencil className="h-3 w-3" />
+                        </button>
+                        <button className="p-0.5 hover:text-foreground text-muted-foreground" onClick={e => { e.stopPropagation(); copySnippet(snippet.text); }} title="Copiar">
+                          <Copy className="h-3 w-3" />
+                        </button>
+                        <button className="p-0.5 hover:text-destructive text-muted-foreground" onClick={e => { e.stopPropagation(); removeSnippet(snippet.id); }} title="Remover">
+                          <Trash2 className="h-3 w-3" />
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             ))}
             {snippets.length === 0 && (

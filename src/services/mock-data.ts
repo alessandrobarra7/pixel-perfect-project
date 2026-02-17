@@ -5,32 +5,32 @@ import type {
 
 // ====== UNITS ======
 export const mockUnits: Unit[] = [
-  { id: 'u1', name: 'UBS Central', slug: 'ubs-central', is_active: true, created_at: '2026-01-01T00:00:00Z', updated_at: '2026-01-01T00:00:00Z' },
-  { id: 'u2', name: 'Hospital Municipal', slug: 'hospital-municipal', is_active: true, created_at: '2026-01-01T00:00:00Z', updated_at: '2026-01-01T00:00:00Z' },
-  { id: 'u3', name: 'Clínica Norte', slug: 'clinica-norte', is_active: false, created_at: '2026-01-01T00:00:00Z', updated_at: '2026-01-01T00:00:00Z' },
+  { id: 'u1', name: 'UBS Central', slug: 'ubs-central', is_active: true, ae_title: 'UBS_CENTRAL', ip_address: '192.168.1.10', port: 4242, orthanc_base_url: 'http://192.168.1.10:8042', created_at: '2026-01-01T00:00:00Z', updated_at: '2026-01-01T00:00:00Z' },
+  { id: 'u2', name: 'Hospital Municipal', slug: 'hospital-municipal', is_active: true, ae_title: 'HOSP_MUN', ip_address: '192.168.2.20', port: 4242, orthanc_base_url: 'http://192.168.2.20:8042', created_at: '2026-01-01T00:00:00Z', updated_at: '2026-01-01T00:00:00Z' },
+  { id: 'u3', name: 'Clínica Norte', slug: 'clinica-norte', is_active: false, ae_title: 'CLIN_NORTE', ip_address: '10.0.0.5', port: 11112, orthanc_base_url: 'http://10.0.0.5:8042', created_at: '2026-01-01T00:00:00Z', updated_at: '2026-01-01T00:00:00Z' },
 ];
 
 // ====== USERS ======
 export const mockUsers: User[] = [
-  { id: 'usr1', email: 'admin@portal.med', full_name: 'Carlos Admin', role: 'admin_master', unit_id: 'u1', unit_name: 'UBS Central', is_active: true, created_at: '2026-01-01T00:00:00Z', updated_at: '2026-01-01T00:00:00Z' },
-  { id: 'usr2', email: 'maria@portal.med', full_name: 'Dra. Maria Silva', role: 'medico', unit_id: 'u1', unit_name: 'UBS Central', is_active: true, created_at: '2026-01-05T00:00:00Z', updated_at: '2026-01-05T00:00:00Z' },
-  { id: 'usr3', email: 'joao@portal.med', full_name: 'Dr. João Souza', role: 'medico', unit_id: 'u2', unit_name: 'Hospital Municipal', is_active: true, created_at: '2026-01-10T00:00:00Z', updated_at: '2026-01-10T00:00:00Z' },
-  { id: 'usr4', email: 'ana@portal.med', full_name: 'Ana Técnica', role: 'viewer', unit_id: 'u2', unit_name: 'Hospital Municipal', is_active: true, created_at: '2026-01-12T00:00:00Z', updated_at: '2026-01-12T00:00:00Z' },
-  { id: 'usr5', email: 'pedro@portal.med', full_name: 'Pedro Admin Unid.', role: 'unit_admin', unit_id: 'u2', unit_name: 'Hospital Municipal', is_active: true, created_at: '2026-01-15T00:00:00Z', updated_at: '2026-01-15T00:00:00Z' },
+  { id: 'usr1', email: 'admin@lauds.med', full_name: 'Carlos Administrador', role: 'admin_master', unit_id: 'u1', unit_name: 'UBS Central', is_active: true, created_at: '2026-01-01T00:00:00Z', updated_at: '2026-01-01T00:00:00Z' },
+  { id: 'usr2', email: 'maria@lauds.med', full_name: 'Dra. Maria Silva', role: 'medico', unit_id: 'u1', unit_name: 'UBS Central', is_active: true, created_at: '2026-01-05T00:00:00Z', updated_at: '2026-01-05T00:00:00Z' },
+  { id: 'usr3', email: 'joao@lauds.med', full_name: 'Dr. João Souza', role: 'medico', unit_id: 'u2', unit_name: 'Hospital Municipal', is_active: true, created_at: '2026-01-10T00:00:00Z', updated_at: '2026-01-10T00:00:00Z' },
+  { id: 'usr4', email: 'ana@lauds.med', full_name: 'Ana Técnica', role: 'viewer', unit_id: 'u2', unit_name: 'Hospital Municipal', is_active: true, created_at: '2026-01-12T00:00:00Z', updated_at: '2026-01-12T00:00:00Z' },
+  { id: 'usr5', email: 'pedro@lauds.med', full_name: 'Pedro Gestor', role: 'unit_admin', unit_id: 'u2', unit_name: 'Hospital Municipal', is_active: true, created_at: '2026-01-15T00:00:00Z', updated_at: '2026-01-15T00:00:00Z' },
 ];
 
 // ====== STUDIES ======
 const modalities: StudyModalityType[] = ['CR', 'CT', 'MR', 'US', 'DX', 'MG'];
 const descriptions = ['Tórax PA', 'Crânio s/ contraste', 'Coluna lombar', 'Abdômen total', 'Mamografia bilateral', 'Joelho direito', 'Pelve AP'];
 const patients = [
-  { name: 'SILVA, JOSE CARLOS', id: 'P001' },
-  { name: 'OLIVEIRA, MARIA APARECIDA', id: 'P002' },
-  { name: 'SANTOS, PEDRO HENRIQUE', id: 'P003' },
-  { name: 'FERREIRA, ANA LUCIA', id: 'P004' },
-  { name: 'SOUZA, FRANCISCO', id: 'P005' },
-  { name: 'COSTA, CLAUDIA MARIA', id: 'P006' },
-  { name: 'PEREIRA, JOAO BATISTA', id: 'P007' },
-  { name: 'RODRIGUES, FERNANDA', id: 'P008' },
+  { name: 'JOSE CARLOS SILVA', id: 'P001' },
+  { name: 'MARIA APARECIDA OLIVEIRA', id: 'P002' },
+  { name: 'PEDRO HENRIQUE SANTOS', id: 'P003' },
+  { name: 'ANA LUCIA FERREIRA', id: 'P004' },
+  { name: 'FRANCISCO SOUZA', id: 'P005' },
+  { name: 'CLAUDIA MARIA COSTA', id: 'P006' },
+  { name: 'JOAO BATISTA PEREIRA', id: 'P007' },
+  { name: 'FERNANDA RODRIGUES', id: 'P008' },
 ];
 
 function randomDate(daysBack: number) {
@@ -74,7 +74,7 @@ export const mockReports: Report[] = [
 
 // ====== AUDIT ======
 export const mockAuditLogs: AuditLog[] = [
-  { id: 'a1', user_id: 'usr1', user_name: 'Carlos Admin', unit_id: 'u1', action: 'LOGIN', target_type: 'SESSION', target_id: null, created_at: '2026-02-17T08:00:00Z' },
+  { id: 'a1', user_id: 'usr1', user_name: 'Carlos Administrador', unit_id: 'u1', action: 'LOGIN', target_type: 'SESSION', target_id: null, created_at: '2026-02-17T08:00:00Z' },
   { id: 'a2', user_id: 'usr2', user_name: 'Dra. Maria Silva', unit_id: 'u1', action: 'VIEW_STUDY', target_type: 'STUDY', target_id: 'study-003', created_at: '2026-02-17T09:15:00Z' },
   { id: 'a3', user_id: 'usr2', user_name: 'Dra. Maria Silva', unit_id: 'u1', action: 'CREATE_REPORT', target_type: 'REPORT', target_id: 'rpt1', created_at: '2026-02-17T09:20:00Z' },
   { id: 'a4', user_id: 'usr3', user_name: 'Dr. João Souza', unit_id: 'u2', action: 'LOGIN', target_type: 'SESSION', target_id: null, created_at: '2026-02-17T10:00:00Z' },

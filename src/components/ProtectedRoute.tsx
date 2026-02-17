@@ -21,7 +21,7 @@ export default function ProtectedRoute({ children, allowedRoles }: Props) {
   if (!isAuthenticated) return <Navigate to="/login" replace />;
 
   if (allowedRoles && user && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/studies" replace />;
   }
 
   return <>{children}</>;

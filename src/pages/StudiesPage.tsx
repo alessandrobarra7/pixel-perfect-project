@@ -1,11 +1,12 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { getStudies } from '@/services/api';
+import { useAuth } from '@/contexts/AuthContext';
 import type { Study, StudyFilters, PaginatedResponse } from '@/types';
+import { canReport, canPrintReport, formatPatientName } from '@/types';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Search, FileEdit, ChevronLeft, ChevronRight, Printer, CheckCircle2, Clock, AlertCircle } from 'lucide-react';
+import { Search, FileEdit, ChevronLeft, ChevronRight, Printer, CheckCircle2, Clock, AlertCircle, Eye } from 'lucide-react';
 
 function reportStatusIcon(status: string | null) {
   if (!status) return <Clock className="h-3.5 w-3.5 text-muted-foreground" />;
@@ -21,7 +22,6 @@ function reportStatusLabel(status: string | null) {
   return status;
 }
 
-// Mock unit name mapping
 const unitNames: Record<string, string> = {
   u1: 'UBS Central',
   u2: 'Hospital Municipal',
@@ -29,10 +29,14 @@ const unitNames: Record<string, string> = {
 };
 
 export default function StudiesPage() {
+  const { user } = useAuth();
   const [data, setData] = useState<PaginatedResponse<Study> | null>(null);
   const [filters, setFilters] = useState<StudyFilters>({ page: 1, per_page: 15 });
   const [searchInput, setSearchInput] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const userCanReport = user ? canReport(user.role) : false;
+  const userCanPrint = user ? canPrintReport(user.role) : false;
 
   const fetchData = useCallback(async (f: StudyFilters) => {
     setLoading(true);
@@ -78,23 +82,28 @@ export default function StudiesPage() {
               <th className="px-3 py-2 text-left font-medium text-muted-foreground">Data</th>
               <th className="px-3 py-2 text-left font-medium text-muted-foreground">Paciente</th>
               <th className="px-3 py-2 text-left font-medium text-muted-foreground">Unidade</th>
-              <th className="px-3 py-2 text-center font-medium text-muted-foreground">Impressão</th>
-              <th className="px-3 py-2 text-center font-medium text-muted-foreground">Laudar</th>
+              <th className="px-3 py-2 text-center font-medium text-muted-foreground">Visualizar</th>
+              {userCanPrint && (
+                <th className="px-3 py-2 text-center font-medium text-muted-foreground">Impressão</th>
+              )}
+              {userCanReport && (
+                <th className="px-3 py-2 text-center font-medium text-muted-foreground">Laudar</th>
+              )}
               <th className="px-3 py-2 text-center font-medium text-muted-foreground">Status Envio</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={6} className="text-center py-10 text-muted-foreground">
+                <td colSpan={7} className="text-center py-10 text-muted-foreground">
                   <div className="h-5 w-5 mx-auto animate-spin rounded-full border-2 border-primary border-t-transparent" />
                 </td>
               </tr>
             ) : !data?.items.length ? (
               <tr>
-                <td colSpan={6} className="text-center py-10 text-muted-foreground">Nenhum estudo encontrado</td>
+                <td colSpan={7} className="text-center py-10 text-muted-foreground">Nenhum estudo encontrado</td>
               </tr>
-            ) : data.items.map((study, i) => (
+            ) : data.items.map((study) => (
               <tr
                 key={study.id}
                 className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors"
@@ -103,23 +112,37 @@ export default function StudiesPage() {
                   {new Date(study.study_date).toLocaleDateString('pt-BR')}
                 </td>
                 <td className="px-3 py-2 font-medium text-foreground max-w-[220px] truncate">
-                  {study.patient_name}
+                  {formatPatientName(study.patient_name)}
                 </td>
                 <td className="px-3 py-2 text-muted-foreground">
                   {unitNames[study.unit_id] || study.unit_id}
                 </td>
+                {/* Visualizar — all users */}
                 <td className="px-3 py-2 text-center">
-                  <Button variant="ghost" size="icon" className="h-7 w-7" title="Imprimir laudo">
-                    <Printer className="h-3.5 w-3.5" />
-                  </Button>
-                </td>
-                <td className="px-3 py-2 text-center">
-                  <Button variant="ghost" size="icon" className="h-7 w-7" asChild title="Laudar">
-                    <Link to={`/reports/${study.id}`}>
-                      <FileEdit className="h-3.5 w-3.5" />
+                  <Button variant="ghost" size="icon" className="h-7 w-7" asChild title="Visualizar exame">
+                    <Link to={`/viewer/${study.id}`}>
+                      <Eye className="h-3.5 w-3.5" />
                     </Link>
                   </Button>
                 </td>
+                {/* Impressão — print-capable roles */}
+                {userCanPrint && (
+                  <td className="px-3 py-2 text-center">
+                    <Button variant="ghost" size="icon" className="h-7 w-7" title="Imprimir laudo">
+                      <Printer className="h-3.5 w-3.5" />
+                    </Button>
+                  </td>
+                )}
+                {/* Laudar — only medico/admin */}
+                {userCanReport && (
+                  <td className="px-3 py-2 text-center">
+                    <Button variant="ghost" size="icon" className="h-7 w-7" asChild title="Laudar">
+                      <Link to={`/reports/${study.id}`}>
+                        <FileEdit className="h-3.5 w-3.5" />
+                      </Link>
+                    </Button>
+                  </td>
+                )}
                 <td className="px-3 py-2">
                   <div className="flex items-center justify-center gap-1.5">
                     {reportStatusIcon(study.report_status)}

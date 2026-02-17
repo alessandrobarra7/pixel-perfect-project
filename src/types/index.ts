@@ -23,6 +23,9 @@ export interface Unit {
   slug: string;
   is_active: boolean;
   orthanc_base_url?: string;
+  ae_title?: string;
+  ip_address?: string;
+  port?: number;
   created_at: string;
   updated_at: string;
 }
@@ -129,4 +132,31 @@ export interface DashboardStats {
   signed_reports: number;
   studies_today: number;
   recent_activity: AuditLog[];
+}
+
+// ====== PERMISSION HELPERS ======
+
+export function canReport(role: UserRole): boolean {
+  return role === 'medico' || role === 'admin_master';
+}
+
+export function canViewExam(_role: UserRole): boolean {
+  return true; // all roles
+}
+
+export function canPrintReport(role: UserRole): boolean {
+  return role === 'viewer' || role === 'medico' || role === 'admin_master' || role === 'unit_admin';
+}
+
+export function canAccessAdmin(role: UserRole): boolean {
+  return role === 'admin_master' || role === 'unit_admin';
+}
+
+/** Convert "SOBRENOME, NOME" to "NOME SOBRENOME" */
+export function formatPatientName(name: string): string {
+  if (name.includes(',')) {
+    const parts = name.split(',').map(p => p.trim());
+    return parts.reverse().join(' ');
+  }
+  return name;
 }
