@@ -11,11 +11,19 @@ export const mockUnits: Unit[] = [
 ];
 
 // ====== USERS ======
+export const mockUserPasswords: Record<string, string> = {
+  'alessandro': '123456789',
+  'gian': 'por',
+  'jean': 'isso',
+  'ana@lauds.med': '',    // qualquer senha
+  'pedro@lauds.med': '',  // qualquer senha
+};
+
 export const mockUsers: User[] = [
-  { id: 'usr1', email: 'admin@lauds.med', full_name: 'Carlos Administrador', role: 'admin_master', unit_id: 'u1', unit_name: 'UBS Central', is_active: true, created_at: '2026-01-01T00:00:00Z', updated_at: '2026-01-01T00:00:00Z' },
-  { id: 'usr2', email: 'maria@lauds.med', full_name: 'Dra. Maria Silva', role: 'medico', unit_id: 'u1', unit_name: 'UBS Central', is_active: true, created_at: '2026-01-05T00:00:00Z', updated_at: '2026-01-05T00:00:00Z' },
-  { id: 'usr3', email: 'joao@lauds.med', full_name: 'Dr. João Souza', role: 'medico', unit_id: 'u2', unit_name: 'Hospital Municipal', is_active: true, created_at: '2026-01-10T00:00:00Z', updated_at: '2026-01-10T00:00:00Z' },
-  { id: 'usr4', email: 'ana@lauds.med', full_name: 'Ana Técnica', role: 'viewer', unit_id: 'u2', unit_name: 'Hospital Municipal', is_active: true, created_at: '2026-01-12T00:00:00Z', updated_at: '2026-01-12T00:00:00Z' },
+  { id: 'usr1', email: 'alessandro', full_name: 'Alessandro Mestre', role: 'admin_master', unit_id: 'u1', unit_name: 'UBS Central', is_active: true, created_at: '2026-01-01T00:00:00Z', updated_at: '2026-01-01T00:00:00Z' },
+  { id: 'usr2', email: 'gian', full_name: 'Dr. Gian Medicina', role: 'medico', unit_id: 'u1', unit_name: 'UBS Central', is_active: true, created_at: '2026-01-05T00:00:00Z', updated_at: '2026-01-05T00:00:00Z' },
+  { id: 'usr3', email: 'jean', full_name: 'Dr. Jean Medicina', role: 'medico', unit_id: 'u2', unit_name: 'Hospital Municipal', is_active: true, created_at: '2026-01-10T00:00:00Z', updated_at: '2026-01-10T00:00:00Z' },
+  { id: 'usr4', email: 'ana@lauds.med', full_name: 'Ana Visualização', role: 'viewer', unit_id: 'u2', unit_name: 'Hospital Municipal', is_active: true, created_at: '2026-01-12T00:00:00Z', updated_at: '2026-01-12T00:00:00Z' },
   { id: 'usr5', email: 'pedro@lauds.med', full_name: 'Pedro Gestor', role: 'unit_admin', unit_id: 'u2', unit_name: 'Hospital Municipal', is_active: true, created_at: '2026-01-15T00:00:00Z', updated_at: '2026-01-15T00:00:00Z' },
 ];
 
@@ -68,17 +76,17 @@ export const mockTemplates: ReportTemplate[] = [
 
 // ====== REPORTS ======
 export const mockReports: Report[] = [
-  { id: 'rpt1', unit_id: 'u1', study_id: 'study-003', author_user_id: 'usr2', author_name: 'Dra. Maria Silva', template_id: 'tpl1', body: '**LAUDO RADIOLÓGICO**\n\nTórax em PA:\n\n- Campos pulmonares: Transparentes\n- Área cardíaca: Normal\n- Mediastino: Sem alargamento\n- Seios costofrênicos: Livres\n\n**IMPRESSÃO:** Exame dentro dos limites da normalidade.\n', status: 'draft', created_at: '2026-02-10T10:00:00Z', updated_at: '2026-02-10T10:30:00Z', signed_at: null },
-  { id: 'rpt2', unit_id: 'u1', study_id: 'study-004', author_user_id: 'usr2', author_name: 'Dra. Maria Silva', template_id: 'tpl2', body: '**LAUDO TOMOGRÁFICO - CRÂNIO**\n\nParênquima cerebral sem alterações.\nSistema ventricular de dimensões normais.\n\n**IMPRESSÃO:** Exame normal.\n', status: 'signed', created_at: '2026-02-08T14:00:00Z', updated_at: '2026-02-08T15:00:00Z', signed_at: '2026-02-08T15:00:00Z' },
+  { id: 'rpt1', unit_id: 'u1', study_id: 'study-003', author_user_id: 'usr2', author_name: 'Dr. Gian Medicina', template_id: 'tpl1', body: '**LAUDO RADIOLÓGICO**\n\nTórax em PA:\n\n- Campos pulmonares: Transparentes\n- Área cardíaca: Normal\n- Mediastino: Sem alargamento\n- Seios costofrênicos: Livres\n\n**IMPRESSÃO:** Exame dentro dos limites da normalidade.\n', status: 'draft', created_at: '2026-02-10T10:00:00Z', updated_at: '2026-02-10T10:30:00Z', signed_at: null },
+  { id: 'rpt2', unit_id: 'u1', study_id: 'study-004', author_user_id: 'usr2', author_name: 'Dr. Gian Medicina', template_id: 'tpl2', body: '**LAUDO TOMOGRÁFICO - CRÂNIO**\n\nParênquima cerebral sem alterações.\nSistema ventricular de dimensões normais.\n\n**IMPRESSÃO:** Exame normal.\n', status: 'signed', created_at: '2026-02-08T14:00:00Z', updated_at: '2026-02-08T15:00:00Z', signed_at: '2026-02-08T15:00:00Z' },
 ];
 
 // ====== AUDIT ======
 export const mockAuditLogs: AuditLog[] = [
-  { id: 'a1', user_id: 'usr1', user_name: 'Carlos Administrador', unit_id: 'u1', action: 'LOGIN', target_type: 'SESSION', target_id: null, created_at: '2026-02-17T08:00:00Z' },
-  { id: 'a2', user_id: 'usr2', user_name: 'Dra. Maria Silva', unit_id: 'u1', action: 'VIEW_STUDY', target_type: 'STUDY', target_id: 'study-003', created_at: '2026-02-17T09:15:00Z' },
-  { id: 'a3', user_id: 'usr2', user_name: 'Dra. Maria Silva', unit_id: 'u1', action: 'CREATE_REPORT', target_type: 'REPORT', target_id: 'rpt1', created_at: '2026-02-17T09:20:00Z' },
-  { id: 'a4', user_id: 'usr3', user_name: 'Dr. João Souza', unit_id: 'u2', action: 'LOGIN', target_type: 'SESSION', target_id: null, created_at: '2026-02-17T10:00:00Z' },
-  { id: 'a5', user_id: 'usr3', user_name: 'Dr. João Souza', unit_id: 'u2', action: 'OPEN_VIEWER', target_type: 'STUDY', target_id: 'study-006', created_at: '2026-02-17T10:05:00Z' },
+  { id: 'a1', user_id: 'usr1', user_name: 'Alessandro Mestre', unit_id: 'u1', action: 'LOGIN', target_type: 'SESSION', target_id: null, created_at: '2026-02-17T08:00:00Z' },
+  { id: 'a2', user_id: 'usr2', user_name: 'Dr. Gian Medicina', unit_id: 'u1', action: 'VIEW_STUDY', target_type: 'STUDY', target_id: 'study-003', created_at: '2026-02-17T09:15:00Z' },
+  { id: 'a3', user_id: 'usr2', user_name: 'Dr. Gian Medicina', unit_id: 'u1', action: 'CREATE_REPORT', target_type: 'REPORT', target_id: 'rpt1', created_at: '2026-02-17T09:20:00Z' },
+  { id: 'a4', user_id: 'usr3', user_name: 'Dr. Jean Medicina', unit_id: 'u2', action: 'LOGIN', target_type: 'SESSION', target_id: null, created_at: '2026-02-17T10:00:00Z' },
+  { id: 'a5', user_id: 'usr3', user_name: 'Dr. Jean Medicina', unit_id: 'u2', action: 'OPEN_VIEWER', target_type: 'STUDY', target_id: 'study-006', created_at: '2026-02-17T10:05:00Z' },
 ];
 
 // ====== DASHBOARD STATS ======

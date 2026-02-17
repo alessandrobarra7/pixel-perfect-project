@@ -64,13 +64,13 @@ export default function LoginPage() {
               </div>
             )}
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-muted-foreground">Email</label>
+              <label className="text-xs font-medium text-muted-foreground">Usuário</label>
               <Input
-                type="email"
+                type="text"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 required
-                placeholder="seu@email.com"
+                placeholder="seu usuário"
                 className="h-9 text-sm"
               />
             </div>
