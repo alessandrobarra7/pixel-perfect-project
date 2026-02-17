@@ -14,7 +14,7 @@ import type {
 } from '@/types';
 import {
   mockUsers, mockStudies, mockReports, mockTemplates,
-  mockUnits, mockAuditLogs, mockDashboardStats,
+  mockUnits, mockAuditLogs, mockDashboardStats, mockUserPasswords,
 } from './mock-data';
 
 // Simula delay de rede
@@ -26,7 +26,11 @@ export async function login(req: LoginRequest): Promise<LoginResponse> {
   await delay(500);
   const user = mockUsers.find(u => u.email === req.email);
   if (!user) throw new Error('Credenciais inválidas');
-  // Mock: qualquer senha aceita
+  // Verifica senha — se vazia no mapa, aceita qualquer senha
+  const expectedPw = mockUserPasswords[req.email];
+  if (expectedPw !== '' && expectedPw !== undefined && req.password !== expectedPw) {
+    throw new Error('Credenciais inválidas');
+  }
   return {
     access_token: 'mock-jwt-token-' + user.id,
     token_type: 'bearer',
